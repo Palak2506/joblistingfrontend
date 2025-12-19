@@ -99,7 +99,7 @@ function App() {
                   fontSize: "14px"
                 }}
               >
-                Apply Now
+                Apply Now.
               </a>
             </div>
 
