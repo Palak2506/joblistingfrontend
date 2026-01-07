@@ -1,37 +1,47 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./App.css";
 
 function App() {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [location, setLocation] = useState("");
+  const [page, setPage] = useState(1);
 
-  const fetchJobs = async (searchLocation = "") => {
-    const res = await axios.get(
-  `https://joblistingbackend-6pww.onrender.com/jobs?location=${searchLocation}&page=1&limit=10`
-    );
 
-    setJobs(res.data.jobs); 
-    setJobs(res.data);
-    if (res.data.length > 0 && !selectedJob) {
-      setSelectedJob(res.data[0]);
-    }
-  };
+ const fetchJobs = async (searchLocation = "", pageNumber = 1) => {
+  try {
+    const res = await axios.get("https://joblistingbackend-6pww.onrender.com/", {
+      params: {
+        location: searchLocation,
+        page: pageNumber,
+        limit: 20 
+      }
+    });
 
-  useEffect(() => {
-    fetchJobs();
-  }, []);
+    const jobsArray = res.data.jobs;
+
+    setJobs(jobsArray);
+    setSelectedJob(jobsArray[0] || null);
+
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    setJobs([]);
+    setSelectedJob(null);
+  }
+};
+
+
+
+ useEffect(() => {
+  fetchJobs(location, page);
+}, [page]);
+
 
   return (
-    <div style={{ display: "flex", height: "100vh", backgroundColor: "#fff" }}>
-      
+    <div className="app-container">      
       {/* LEFT PANEL: Job Card List */}
-      <div style={{ 
-        width: "400px", 
-        borderRight: "1px solid #e0e0e0", 
-        overflowY: "auto", 
-        padding: "16px" 
-      }}>
+      <div className="left-panel">
         <div style={{ marginBottom: "20px" }}>
           <input
             type="text"
@@ -51,21 +61,16 @@ function App() {
             }}
           />
         </div>
+        
 
         {jobs.map((job) => (
           <div
-            key={job._id}
-            onClick={() => setSelectedJob(job)}
-            style={{
-              padding: "16px",
-              borderRadius: "8px",
-              border: selectedJob?._id === job._id ? "2px solid #2557a7" : "1px solid #e0e0e0",
-              marginBottom: "12px",
-              cursor: "pointer",
-              backgroundColor: selectedJob?._id === job._id ? "#f3f8ff" : "white",
-              transition: "0.2s"
-            }}
-          >
+  onClick={() => setSelectedJob(job)}
+  className={`job-card ${
+    selectedJob?._id === job._id ? "active" : ""
+  }`}
+>
+
             <h4 style={{ margin: "0 0 4px 0", color: "#2d2d2d", fontSize: "16px" }}>{job.title}</h4>
             <p style={{ margin: "0", color: "#6f6f6f", fontSize: "14px" }}>{job.company}</p>
             <p style={{ margin: "4px 0", color: "#6f6f6f", fontSize: "14px" }}>{job.location}</p>
@@ -78,9 +83,10 @@ function App() {
       </div>
 
       {/* RIGHT PANEL: Detailed View */}
-      <div style={{ flex: 1, padding: "32px", overflowY: "auto" }}>
+      <div className="right-panel">
         {selectedJob ? (
-          <div style={{ maxWidth: "800px", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+         <div className="job-detail">
+
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
                 <h1 style={{ margin: "0 0 8px 0", fontSize: "24px" }}>{selectedJob.title}</h1>
