@@ -11,7 +11,7 @@ function App() {
 
  const fetchJobs = async (searchLocation = "", pageNumber = 1) => {
   try {
-    const res = await axios.get("https://joblistingbackend-6pww.onrender.com/", {
+    const res = await axios.get("https://joblistingbackend-6pww.onrender.com/jobs", {
       params: {
         location: searchLocation,
         page: pageNumber,
