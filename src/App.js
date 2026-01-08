@@ -15,7 +15,7 @@ function App() {
       params: {
         location: searchLocation,
         page: pageNumber,
-        limit: 20 
+        limit: 5 
       }
     });
 
