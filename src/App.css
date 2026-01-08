@@ -62,3 +62,29 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}

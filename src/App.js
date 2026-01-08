@@ -35,7 +35,7 @@ function App() {
 
  useEffect(() => {
   fetchJobs(location, page);
-}, [page]);
+}, [page, location]);
 
 
   return (
@@ -56,20 +56,21 @@ function App() {
             }}
             value={location}
             onChange={(e) => {
-              setLocation(e.target.value);
-              fetchJobs(e.target.value);
-            }}
+            setLocation(e.target.value);
+             setPage(1); 
+}}
+
           />
         </div>
         
 
         {jobs.map((job) => (
           <div
+  key={job._id}
   onClick={() => setSelectedJob(job)}
-  className={`job-card ${
-    selectedJob?._id === job._id ? "active" : ""
-  }`}
+  className={`job-card ${selectedJob?._id === job._id ? "active" : ""}`}
 >
+
 
             <h4 style={{ margin: "0 0 4px 0", color: "#2d2d2d", fontSize: "16px" }}>{job.title}</h4>
             <p style={{ margin: "0", color: "#6f6f6f", fontSize: "14px" }}>{job.company}</p>
@@ -80,6 +81,25 @@ function App() {
             </div>
           </div>
         ))}
+
+        {/* PAGINATION CONTROLS */}
+<div className="pagination">
+  <button
+    onClick={() => setPage((p) => Math.max(p - 1, 1))}
+    disabled={page === 1}
+  >
+    Previous
+  </button>
+
+  <span>Page {page}</span>
+
+  <button
+    onClick={() => setPage((p) => p + 1)}
+  >
+    Next
+  </button>
+</div>
+
       </div>
 
       {/* RIGHT PANEL: Detailed View */}
